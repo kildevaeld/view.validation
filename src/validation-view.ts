@@ -59,7 +59,7 @@ export interface ValidationViewOptions {
     event: string;
 }
 
-export function ValidationView<T extends BaseViewConstructor<BaseView<E>, E>, E extends Element>(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
+export function withValidation<T extends BaseViewConstructor<BaseView<E>, E>, E extends Element>(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
 
     function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
         return function (this: T, e: DelegateEvent) {

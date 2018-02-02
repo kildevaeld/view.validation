@@ -54,4 +54,4 @@ export interface IValidationView {
 export interface ValidationViewOptions {
     event: string;
 }
-export declare function ValidationView<T extends BaseViewConstructor<BaseView<E>, E>, E extends Element>(Base: T, options?: ValidationViewOptions): Constructor<IValidationView> & T;
+export declare function withValidation<T extends BaseViewConstructor<BaseView<E>, E>, E extends Element>(Base: T, options?: ValidationViewOptions): Constructor<IValidationView> & T;
