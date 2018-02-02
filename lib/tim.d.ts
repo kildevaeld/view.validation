@@ -6,4 +6,4 @@
 /**
  * This is used by the validator, for interpolating in errors messages
  */
-export declare const tim: (template: string, data: any) => string;
+export declare const tim: (template: string, data?: any, shouldThrow?: boolean) => string;
