@@ -15,7 +15,7 @@ export const tim = (function () {
         pattern = new RegExp(start + "\\s*(" + path + ")\\s*" + end, "gi"),
         undef: undefined;
 
-    return function (template: string, data: any) {
+    return function (template: string, data?: any, shouldThrow: boolean = true) {
         // Merge data into the template string
         return template.replace(pattern, function (tag, token) {
             var path = token.split("."),
@@ -28,7 +28,9 @@ export const tim = (function () {
 
                 // Property not found
                 if (lookup === undef) {
-                    throw "tim: '" + path[i] + "' not found in " + tag;
+                    if (shouldThrow)
+                        throw new Error("tim: '" + path[i] + "' not found in " + tag);
+                    return '';
                 }
 
                 // Return the required value
