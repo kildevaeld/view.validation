@@ -1,4 +1,4 @@
-import { getValue } from 'view.extras';
+import { getValue } from 'view.html';
 import { IValidator } from './types';
 import { equal } from 'equaljs';
 

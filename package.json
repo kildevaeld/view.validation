@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "view": "github:kildevaeld/view#development",
-    "view.html": "github:kildevaeld/view.html"
+    "view.html": "github:kildevaeld/view.html",
+    "equaljs": "github:kildevaeld/equaljs"
   },
   "typings": "./lib/index.d.ts"
 }
