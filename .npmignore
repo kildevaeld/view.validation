@@ -1,5 +1,6 @@
 src/
 lib/example/
+example/
 .DS_Store
 rollup.config.js
 tsconfig.json
