@@ -37,7 +37,6 @@
     "rollup-plugin-typescript": "^0.8.1"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.51",
     "@viewjs/html": "^0.3.1",
     "@viewjs/utils": "^1.0.0",
     "@viewjs/view": "^2.4.0"
