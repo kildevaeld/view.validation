@@ -8,8 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node ./node_modules/.bin/tsc; node ./node_modules/.bin/rollup -c"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "email": "rasmuskildevaed@gmail.com",
+    "name": "Rasmus Kildevæld"
+  },
+  "license": "MIT",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-bump": "^2.7.0",
@@ -26,7 +29,7 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "@viewjs/html": "^0.3.0",
+    "@viewjs/html": "^0.3.1",
     "@viewjs/utils": "^1.0.0",
     "@viewjs/view": "^2.4.0"
   },

@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@viewjs/html'), require('@viewjs/utils'), require('@viewjs/view')) :
 	typeof define === 'function' && define.amd ? define(['@viewjs/html', '@viewjs/utils', '@viewjs/view'], factory) :
-	(global.view = global.view || {}, global.view.validation = factory(global.viewjs.html,global.viewjs.utils,global.viewjs.view));
+	(global.viewjs = global.viewjs || {}, global.viewjs.validation = factory(global.viewjs.html,global.viewjs.utils,global.viewjs.view));
 }(this, (function (html_1,utils_1,view) { 'use strict';
 
 html_1 = html_1 && html_1.hasOwnProperty('default') ? html_1['default'] : html_1;
