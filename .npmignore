@@ -1,0 +1,6 @@
+src/
+lib/example/
+.DS_Store
+rollup.config.js
+tsconfig.json
+webpack.config.js

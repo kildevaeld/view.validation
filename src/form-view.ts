@@ -9,7 +9,6 @@ export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     errorMessageClass?: string;
 }
 
-
 export class FormView extends withValidation(View, { event: 'keyup' }) implements IValidationView {
 
     readonly options: FormViewOptions;

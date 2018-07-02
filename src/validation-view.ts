@@ -1,6 +1,6 @@
 import { ValidationErrors, ValidationError } from './errors';
 import { Constructor, BaseViewConstructor, BaseView, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
-import { result } from '@viewjs/utils';
+import { result, triggerMethodOn } from '@viewjs/utils';
 import { getValue, setValue } from '@viewjs/html';
 import { IValidatorCollection, ValidatorMap } from './types';
 
@@ -81,6 +81,8 @@ export function withValidation<T extends BaseViewConstructor<BaseView<E>, E>, E 
                 }
             }
 
+            triggerMethodOn(this, 'change:value');
+
         }.bind(self);
     }
 
@@ -149,6 +151,7 @@ export function withValidation<T extends BaseViewConstructor<BaseView<E>, E>, E 
                 const el = this.el!.querySelector(key),
                     name = v[key].key() || el!.getAttribute('name') || v[key].label() || key;
                 out[name] = getValue(el as HTMLElement);
+                if (out[name] === '') out[name] = null;
             }
 
             return out;

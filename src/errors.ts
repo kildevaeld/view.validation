@@ -1,6 +1,7 @@
 import { IValidator } from './types';
 import { tim } from './tim';
 
+
 export class ValidationError extends Error {
     message: string;
     constructor(message: string, public validator?: IValidator) {

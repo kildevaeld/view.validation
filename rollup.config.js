@@ -21,9 +21,9 @@ module.exports = [
         },
         external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils'],
         plugins: [
-            /*typescript({
-                typescript: require('typescript')
-            }),*/
+            // typescript({
+            //     typescript: require('typescript')
+            // }),
             resolve(),
             commonjs(),
             babel({
