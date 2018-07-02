@@ -1,6 +1,7 @@
 import { ValidationErrors, ValidationError } from './errors';
-import { Constructor, BaseViewConstructor, BaseView, normalizeUIKeys, DelegateEvent, result } from 'view';
-import { getValue, setValue } from 'view.html';
+import { Constructor, BaseViewConstructor, BaseView, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
+import { result } from '@viewjs/utils';
+import { getValue, setValue } from '@viewjs/html';
 import { IValidatorCollection, ValidatorMap } from './types';
 
 export interface IValidationView {

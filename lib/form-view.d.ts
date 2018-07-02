@@ -1,4 +1,4 @@
-import { View, BaseViewOptions } from 'view';
+import { View, BaseViewOptions } from '@viewjs/view';
 import { ValidationErrors } from './errors';
 import { IValidationView } from './validation-view';
 export interface FormViewOptions extends BaseViewOptions<HTMLElement> {

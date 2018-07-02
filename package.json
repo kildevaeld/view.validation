@@ -1,11 +1,12 @@
 {
-  "name": "view.validation",
+  "name": "@viewjs/validation",
   "version": "0.1.2",
   "description": "",
   "main": "./lib/index.js",
   "browser": "./dist/view.validation.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node ./node_modules/.bin/tsc; node ./node_modules/.bin/rollup -c"
   },
   "author": "",
   "license": "ISC",
@@ -25,9 +26,9 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "view": "github:kildevaeld/view#development",
-    "view.html": "github:kildevaeld/view.html",
-    "equaljs": "github:kildevaeld/equaljs"
+    "@viewjs/html": "^0.3.0",
+    "@viewjs/utils": "^1.0.0",
+    "@viewjs/view": "^2.4.0"
   },
   "typings": "./lib/index.d.ts"
 }

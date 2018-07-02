@@ -1,5 +1,5 @@
 import { ValidationErrors } from './errors';
-import { Constructor, BaseViewConstructor, BaseView } from 'view';
+import { Constructor, BaseViewConstructor, BaseView } from '@viewjs/view';
 export interface IValidationView {
     /**
      * Validate view. Throws a ValidationErrors on error

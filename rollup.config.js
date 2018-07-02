@@ -14,12 +14,12 @@ module.exports = [
             format: 'umd',
             name: 'view.validation',
             globals: {
-                view: 'view',
-                'view.html': 'view.html',
-                equaljs: 'equaljs'
+                '@viewjs/view': 'viewjs.view',
+                '@viewjs/html': 'viewjs.html',
+                '@viewjs/utils': 'viewjs.utils'
             }
         },
-        external: ['view', 'view.html', 'equaljs'],
+        external: ['@viewjs/view', '@viewjs/html','@viewjs/utils'],
         plugins: [
             /*typescript({
                 typescript: require('typescript')

@@ -1,5 +1,6 @@
-import { View, BaseViewOptions, extend, triggerMethodOn } from 'view';
-import { ValidationErrors } from './errors'
+import { View, BaseViewOptions } from '@viewjs/view';
+import {extend,triggerMethodOn} from '@viewjs/utils';
+import { ValidationErrors } from './errors';
 import { withValidation, IValidationView } from './validation-view';
 
 export interface FormViewOptions extends BaseViewOptions<HTMLElement> {

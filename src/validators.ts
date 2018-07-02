@@ -1,6 +1,6 @@
-import { getValue } from 'view.html';
+import { getValue } from '@viewjs/html';
 import { IValidator } from './types';
-import { equal } from 'equaljs';
+import { equal } from '@viewjs/utils';
 
 export abstract class AbstractValidator {
     message: string;
@@ -18,14 +18,14 @@ export class RequiredValidator extends AbstractValidator implements IValidator {
         return true;
     }
 
-    constructor(msg: string = "{{label}} mangler") {
+    constructor(msg: string = "{{label}} is missing") {
         super(msg);
     }
 }
 
 export class RegexValidator extends AbstractValidator implements IValidator {
     readonly regex: RegExp;
-    constructor(msg: string = "{{label}} er invalid", regex?: RegExp) {
+    constructor(msg: string = "{{label}} is invalid", regex?: RegExp) {
         super(msg);
         (<any>this).regex = regex;
     }
@@ -37,7 +37,7 @@ export class RegexValidator extends AbstractValidator implements IValidator {
 export class EmailValidator extends RegexValidator {
     regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    constructor(msg: string = "{{label}} er ikke en valid email") {
+    constructor(msg: string = "{{label}} is not a valid email addresss") {
         super(msg);
     }
 }

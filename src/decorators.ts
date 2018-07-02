@@ -1,5 +1,5 @@
 import { ValidatorMap } from './types';
-import { BaseView, Constructor, UIMap } from 'view';
+import { BaseView, Constructor, UIMap } from '@viewjs/view';
 import { StringValidator } from './validator'
 
 

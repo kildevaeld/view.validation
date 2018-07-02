@@ -1,12 +1,12 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('view.html'), require('equaljs'), require('view')) :
-	typeof define === 'function' && define.amd ? define(['view.html', 'equaljs', 'view'], factory) :
-	(global.view = global.view || {}, global.view.validation = factory(global.view.html,global.equaljs,global.view));
-}(this, (function (view_html_1,equaljs,view_1) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@viewjs/html'), require('@viewjs/utils'), require('@viewjs/view')) :
+	typeof define === 'function' && define.amd ? define(['@viewjs/html', '@viewjs/utils', '@viewjs/view'], factory) :
+	(global.view = global.view || {}, global.view.validation = factory(global.viewjs.html,global.viewjs.utils,global.viewjs.view));
+}(this, (function (html_1,utils_1,view) { 'use strict';
 
-view_html_1 = view_html_1 && view_html_1.hasOwnProperty('default') ? view_html_1['default'] : view_html_1;
-equaljs = equaljs && equaljs.hasOwnProperty('default') ? equaljs['default'] : equaljs;
-view_1 = view_1 && view_1.hasOwnProperty('default') ? view_1['default'] : view_1;
+html_1 = html_1 && html_1.hasOwnProperty('default') ? html_1['default'] : html_1;
+utils_1 = utils_1 && utils_1.hasOwnProperty('default') ? utils_1['default'] : utils_1;
+view = view && view.hasOwnProperty('default') ? view['default'] : view;
 
 function unwrapExports (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
@@ -119,7 +119,7 @@ var validators = createCommonjsModule(function (module, exports) {
     }]);
 
     function RequiredValidator() {
-      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} mangler";
+      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} is missing";
 
       _classCallCheck(this, RequiredValidator);
 
@@ -139,7 +139,7 @@ var validators = createCommonjsModule(function (module, exports) {
     function RegexValidator() {
       var _this;
 
-      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} er invalid";
+      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} is invalid";
       var regex = arguments[1];
 
       _classCallCheck(this, RegexValidator);
@@ -169,7 +169,7 @@ var validators = createCommonjsModule(function (module, exports) {
     function EmailValidator() {
       var _this2;
 
-      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} er ikke en valid email";
+      var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "{{label}} is not a valid email addresss";
 
       _classCallCheck(this, EmailValidator);
 
@@ -273,8 +273,8 @@ var validators = createCommonjsModule(function (module, exports) {
           throw new TypeError("element with selector: \"".concat(this.selector, "\" not found in dom"));
         }
 
-        var otherValue = view_html_1.getValue(el);
-        return equaljs.equal(value, otherValue);
+        var otherValue = html_1.getValue(el);
+        return utils_1.equal(value, otherValue);
       }
     }]);
 
@@ -589,7 +589,7 @@ var validationView = createCommonjsModule(function (module, exports) {
         if (!target) throw new TypeError('no target');
 
         try {
-          v.validate(view_html_1.getValue(target));
+          v.validate(html_1.getValue(target));
 
           if (typeof this.clearValidationError === 'function') {
             this.clearValidationError(target);
@@ -629,7 +629,7 @@ var validationView = createCommonjsModule(function (module, exports) {
 
               this.delegate('blur', key, function (e) {
                 var target = e.delegateTarget,
-                    value = view_html_1.getValue(target);
+                    value = html_1.getValue(target);
                 if (!value) _this.clearValidationError(target);
               });
             }
@@ -654,7 +654,7 @@ var validationView = createCommonjsModule(function (module, exports) {
               var el = this.el.querySelector(key);
 
               try {
-                v[key].validate(view_html_1.getValue(el));
+                v[key].validate(html_1.getValue(el));
                 if (!silent) this.clearValidationError(el);
               } catch (e) {
                 if (!silent) this.setValidationError(el, e);
@@ -677,7 +677,7 @@ var validationView = createCommonjsModule(function (module, exports) {
             for (var key in v) {
               var el = this.el.querySelector(key),
                   name = v[key].key() || el.getAttribute('name') || v[key].label() || key;
-              out[name] = view_html_1.getValue(el);
+              out[name] = html_1.getValue(el);
             }
 
             return out;
@@ -692,7 +692,7 @@ var validationView = createCommonjsModule(function (module, exports) {
                   name = v[key].key() || el.getAttribute('name') || v[key].label() || key;
 
               if (input[name]) {
-                view_html_1.setValue(el, input[name]);
+                html_1.setValue(el, input[name]);
               }
             }
           }
@@ -703,7 +703,7 @@ var validationView = createCommonjsModule(function (module, exports) {
 
             for (var key in v) {
               var el = this.el.querySelector(key);
-              view_html_1.setValue(el, null);
+              html_1.setValue(el, null);
             }
           }
         }, {
@@ -720,7 +720,7 @@ var validationView = createCommonjsModule(function (module, exports) {
           key: "clearAllErrors",
           value: function clearAllErrors() {
             var ui = this._ui || this.ui,
-                v = view_1.normalizeUIKeys(this._validations, ui);
+                v = view.normalizeUIKeys(this._validations, ui);
 
             for (var key in v) {
               var el = this.el.querySelector(key);
@@ -733,8 +733,8 @@ var validationView = createCommonjsModule(function (module, exports) {
           key: "_getValidations",
           value: function _getValidations() {
             var ui = this._ui || this.ui,
-                validations = view_1.result(this, '_validations') || this.constructor.validations || {},
-                v = view_1.normalizeUIKeys(validations, ui);
+                validations = utils_1.result(this, '_validations') || this.constructor.validations || {},
+                v = view.normalizeUIKeys(validations, ui);
             return v;
           }
         }]);
@@ -762,7 +762,7 @@ var formView = createCommonjsModule(function (module, exports) {
     function FormView(options) {
       _classCallCheck(this, FormView);
 
-      return _possibleConstructorReturn(this, (FormView.__proto__ || Object.getPrototypeOf(FormView)).call(this, view_1.extend({
+      return _possibleConstructorReturn(this, (FormView.__proto__ || Object.getPrototypeOf(FormView)).call(this, utils_1.extend({
         errorMessageClass: 'input-message',
         errorClass: 'has-error',
         showErrorMessage: true
@@ -795,7 +795,7 @@ var formView = createCommonjsModule(function (module, exports) {
         }
 
         container.classList.add(this.options.errorClass);
-        view_1.triggerMethodOn(this, 'valid', false);
+        utils_1.triggerMethodOn(this, 'valid', false);
       }
     }, {
       key: "clearValidationError",
@@ -809,7 +809,7 @@ var formView = createCommonjsModule(function (module, exports) {
         }
 
         container.classList.remove(this.options.errorClass);
-        view_1.triggerMethodOn(this, 'valid', this.isValid());
+        utils_1.triggerMethodOn(this, 'valid', this.isValid());
       }
     }, {
       key: "_getErrorMessage",
@@ -821,7 +821,7 @@ var formView = createCommonjsModule(function (module, exports) {
     }]);
 
     return FormView;
-  }(validationView.withValidation(view_1.View, {
+  }(validationView.withValidation(view.View, {
     event: 'keyup'
   }));
 
