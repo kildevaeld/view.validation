@@ -848,7 +848,7 @@ var formView = createCommonjsModule(function (module, exports) {
     }]);
 
     return FormView;
-  }(validationView.withValidation(view.View, {
+  }(validationView.withValidation(view.BaseView, {
     event: 'keyup'
   }));
 
