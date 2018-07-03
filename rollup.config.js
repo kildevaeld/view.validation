@@ -23,7 +23,7 @@ module.exports = [
         plugins: [
             typescript({
                 typescript: require('typescript'),
-                declration: false
+                declaration: false
             }),
             resolve(),
             commonjs(),
