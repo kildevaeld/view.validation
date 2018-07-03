@@ -1,4 +1,4 @@
-import { View, BaseViewOptions } from '@viewjs/view';
+import { BaseViewOptions, BaseView, Constructor } from '@viewjs/view';
 import { ValidationErrors } from './errors';
 import { IValidationView } from './validation-view';
 export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
@@ -6,9 +6,8 @@ export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     showErrorMessage?: boolean;
     errorMessageClass?: string;
 }
-declare const FormView_base: import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/view/lib/types").Constructor<IValidationView> & typeof View;
+declare const FormView_base: Constructor<IValidationView> & Constructor<BaseView<HTMLElement, FormViewOptions>>;
 export declare class FormView extends FormView_base implements IValidationView {
-    readonly options: FormViewOptions;
     constructor(options?: FormViewOptions);
     setValidationError(target: HTMLElement, errors: ValidationErrors): void;
     clearValidationError(target: HTMLElement): void;
