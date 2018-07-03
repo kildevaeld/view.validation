@@ -8,7 +8,7 @@ const pkg = require('./package.json');
 module.exports = [
     // browser-friendly UMD build
     {
-        input: './lib/index.js',
+        input: './src/index.ts',
         output: {
             file: pkg.browser,
             format: 'umd',
@@ -21,9 +21,9 @@ module.exports = [
         },
         external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils'],
         plugins: [
-            // typescript({
-            //     typescript: require('typescript')
-            // }),
+            typescript({
+                typescript: require('typescript')
+            }),
             resolve(),
             commonjs(),
             babel({
