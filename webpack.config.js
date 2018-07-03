@@ -9,7 +9,7 @@ const babelOptions = {
 };
 
 module.exports = {
-    entry: './src/example/index.ts',
+    entry: './lib/example/index.js',
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: ['.ts', '.tsx', '.js'],
@@ -35,6 +35,13 @@ module.exports = {
                     }
                 }
             ]
+        }, {
+            test: /\.js(x?)$/,
+            exclude: /node_modules/,
+            use: [{
+                loader: 'babel-loader',
+                options: babelOptions
+            }]
         }]
     },
     node: {
