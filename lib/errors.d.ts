@@ -1,6 +1,6 @@
 import { IValidator } from './types';
 export declare class ValidationError extends Error {
-    validator?: IValidator | undefined;
+    validator: IValidator | undefined;
     message: string;
     constructor(message: string, validator?: IValidator | undefined);
 }

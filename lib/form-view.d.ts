@@ -13,4 +13,3 @@ export declare class FormView extends FormView_base implements IValidationView {
     clearValidationError(target: HTMLElement): void;
     protected _getErrorMessage(errors: ValidationErrors): string;
 }
-export {};
