@@ -1,5 +1,5 @@
-import { View, BaseViewOptions, BaseView, Constructor } from '@viewjs/view';
-import { extend, triggerMethodOn } from '@viewjs/utils';
+import { View, BaseViewOptions } from '@viewjs/view';
+import { extend, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { ValidationErrors } from './errors';
 import { withValidation, IValidationView } from './validation-view';
 
@@ -9,7 +9,7 @@ export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     errorMessageClass?: string;
 }
 
-export class FormView extends withValidation<Constructor<BaseView<HTMLElement, FormViewOptions>>, HTMLElement>(BaseView, { event: 'keyup' }) implements IValidationView {
+export class FormView extends withValidation<Constructor<View<HTMLElement, FormViewOptions>>, HTMLElement>(View, { event: 'keyup' }) implements IValidationView {
 
     constructor(options?: FormViewOptions) {
         super(extend({

@@ -26,9 +26,10 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@viewjs/html": "^0.3.1",
-    "@viewjs/utils": "^1.0.0",
-    "@viewjs/view": "^2.5.0"
+    "@viewjs/html": "^1.1.0",
+    "@viewjs/utils": "^1.4.2",
+    "@viewjs/view": "^2.6.0",
+    "@viewjs/data": "^1.1.0"
   },
   "typings": "./lib/index.d.ts"
 }

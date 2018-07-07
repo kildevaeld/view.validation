@@ -1,6 +1,6 @@
 import { ValidationErrors, ValidationError } from './errors';
-import { Constructor, BaseViewConstructor, BaseView, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
-import { result, triggerMethodOn } from '@viewjs/utils';
+import { BaseViewConstructor, View, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
+import { result, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { getValue, setValue } from '@viewjs/html';
 import { IValidatorCollection, ValidatorMap } from './types';
 
@@ -61,7 +61,7 @@ export interface ValidationViewOptions {
     event: string;
 }
 
-export function withValidation<T extends BaseViewConstructor<BaseView<E>, E>, E extends Element>(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
+export function withValidation<T extends BaseViewConstructor<View<E>, E>, E extends Element>(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
 
     function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
         return function (this: T, e: DelegateEvent) {
