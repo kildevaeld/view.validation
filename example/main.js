@@ -1973,8 +1973,7 @@ var ValidationError = function (_Error) {
         var _this = _possibleConstructorReturn(this, (ValidationError.__proto__ || Object.getPrototypeOf(ValidationError)).call(this, message));
 
         _this.validator = validator;
-        // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-        Object.setPrototypeOf(_this, ValidationError.prototype);
+        Object.setPrototypeOf(_this, new.target.prototype);
         return _this;
     }
 
@@ -1992,8 +1991,7 @@ var ValidationErrors = function (_Error2) {
         var _this2 = _possibleConstructorReturn(this, (ValidationErrors.__proto__ || Object.getPrototypeOf(ValidationErrors)).call(this, message));
 
         _this2.errors = errors;
-        // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-        Object.setPrototypeOf(_this2, ValidationErrors.prototype);
+        Object.setPrototypeOf(_this2, new.target.prototype);
         return _this2;
     }
 

@@ -270,8 +270,7 @@
             var _this = possibleConstructorReturn(this, (ValidationError.__proto__ || Object.getPrototypeOf(ValidationError)).call(this, message));
 
             _this.validator = validator;
-            // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-            Object.setPrototypeOf(_this, ValidationError.prototype);
+            Object.setPrototypeOf(_this, new.target.prototype);
             return _this;
         }
 
@@ -287,8 +286,7 @@
             var _this2 = possibleConstructorReturn(this, (ValidationErrors.__proto__ || Object.getPrototypeOf(ValidationErrors)).call(this, message));
 
             _this2.errors = errors;
-            // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-            Object.setPrototypeOf(_this2, ValidationErrors.prototype);
+            Object.setPrototypeOf(_this2, new.target.prototype);
             return _this2;
         }
 

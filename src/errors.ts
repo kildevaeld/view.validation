@@ -6,16 +6,14 @@ export class ValidationError extends Error {
     message: string;
     constructor(message: string, public validator?: IValidator) {
         super(message);
-        // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-        Object.setPrototypeOf(this, ValidationError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class ValidationErrors extends Error {
     constructor(public errors: ValidationError[], message?: string) {
         super(message);
-        // TODO: use Object.setPrototypeOf(this, new.target.prototype);
-        Object.setPrototypeOf(this, ValidationErrors.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
