@@ -516,7 +516,7 @@ function withValidation(Base) {
             key: 'clearAllErrors',
             value: function clearAllErrors() {
                 var ui = this._ui || this.ui,
-                    v = normalizeUIKeys(this._validations, ui);
+                    v = normalizeUIKeys(this.validations, ui);
                 for (var key in v) {
                     var el = this.el.querySelector(key);
                     this.clearValidationError(el);
