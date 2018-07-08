@@ -6,8 +6,8 @@ import { IValidatorCollection, ValidatorMap } from './types';
 import { IModelController, IModel } from '@viewjs/data';
 
 
-export interface IValidationView {
-
+export interface IValidationView<ModelType extends IModel> {
+    validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
     /**
      * Validate view. Throws a ValidationErrors on error
      * Will all call setValidationError on error, and clearValidationError when no error
@@ -41,8 +41,9 @@ export interface ValidationViewOptions {
 
 export function withValidation<
     T extends BaseViewConstructor<View<E>, E>,
-    E extends Element
-    >(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
+    E extends Element,
+    ModelType extends IModel
+    >(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView<ModelType>> & T {
 
     function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
         return function (this: T, e: DelegateEvent) {
@@ -69,7 +70,8 @@ export function withValidation<
 
 
     return class extends Base {
-        private _validations: ValidatorMap | ((this: T) => ValidatorMap);
+
+        validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
 
         render() {
             super.render()
@@ -133,7 +135,7 @@ export function withValidation<
 
         clearAllErrors() {
             const ui = (<any>this)._ui || this.ui,
-                v: any = normalizeUIKeys(this._validations, ui);
+                v: any = normalizeUIKeys(this.validations, ui);
             for (let key in v) {
                 let el = this.el!.querySelector(key);
                 this.clearValidationError(el!);

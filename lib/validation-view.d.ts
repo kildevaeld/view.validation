@@ -1,7 +1,10 @@
 import { ValidationErrors } from './errors';
 import { BaseViewConstructor, View } from '@viewjs/view';
 import { Constructor } from '@viewjs/utils';
-export interface IValidationView {
+import { ValidatorMap } from './types';
+import { IModel } from '@viewjs/data';
+export interface IValidationView<ModelType extends IModel> {
+    validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
     /**
      * Validate view. Throws a ValidationErrors on error
      * Will all call setValidationError on error, and clearValidationError when no error
@@ -31,4 +34,4 @@ export interface IValidationView {
 export interface ValidationViewOptions {
     event: string;
 }
-export declare function withValidation<T extends BaseViewConstructor<View<E>, E>, E extends Element>(Base: T, options?: ValidationViewOptions): Constructor<IValidationView> & T;
+export declare function withValidation<T extends BaseViewConstructor<View<E>, E>, E extends Element, ModelType extends IModel>(Base: T, options?: ValidationViewOptions): Constructor<IValidationView<ModelType>> & T;

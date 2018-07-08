@@ -8,7 +8,7 @@ export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     showErrorMessage?: boolean;
     errorMessageClass?: string;
 }
-declare const FormView_base: Constructor<IValidationView> & typeof View & Constructor<IModelController<import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/data/lib/types").IModel>> & Constructor<import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/data/lib/with-bindings").IBindableView>;
+declare const FormView_base: Constructor<IValidationView<import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/data/lib/types").IModel>> & typeof View & Constructor<IModelController<import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/data/lib/types").IModel>> & Constructor<import("../../../../../../Users/rasmus/Development/Javascripts/view.validation/node_modules/@viewjs/data/lib/with-bindings").IBindableView>;
 export declare class FormView extends FormView_base {
     constructor(options?: FormViewOptions);
     setValidationError(target: HTMLElement, errors: ValidationErrors): void;
