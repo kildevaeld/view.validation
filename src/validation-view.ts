@@ -3,6 +3,7 @@ import { BaseViewConstructor, View, normalizeUIKeys, DelegateEvent } from '@view
 import { result, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { getValue, setValue } from '@viewjs/html';
 import { IValidatorCollection, ValidatorMap } from './types';
+import { IModelController, IModel } from '@viewjs/data';
 
 
 export interface IValidationView {
@@ -23,29 +24,6 @@ export interface IValidationView {
      */
     isValid(): boolean;
     /**
-     * Get the values of the elements defined in the validation hash
-     * 
-     * @returns {{ [key: string]: any }} 
-     * @memberof IValidationView
-     */
-    getValue(): { [key: string]: any };
-
-    /**
-     * Set the values of the elements defined in the validation hash
-     * 
-     * @param {{ [key: string]: any }} value 
-     * @memberof IValidationView
-     */
-    setValue(value: { [key: string]: any }): void;
-
-    /**
-     * Clear the value (set to empty) of all the elements defined in the validation hash
-     * 
-     * @memberof IValidationView
-     */
-    clear(): void;
-
-    /**
      * This is called when a element is invalid
      * 
      * @param {HTMLElement} target 
@@ -61,7 +39,10 @@ export interface ValidationViewOptions {
     event: string;
 }
 
-export function withValidation<T extends BaseViewConstructor<View<E>, E>, E extends Element>(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
+export function withValidation<
+    T extends BaseViewConstructor<View<E>, E>,
+    E extends Element
+    >(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView> & T {
 
     function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
         return function (this: T, e: DelegateEvent) {
@@ -102,8 +83,6 @@ export function withValidation<T extends BaseViewConstructor<View<E>, E>, E exte
                 if (options.event !== 'change')
                     this.delegate('change', wrapper)
 
-                //this.delegate(options.event, key, validation_wrap(this, v[key]));
-
                 this.delegate('blur', key, (e: DelegateEvent) => {
                     let target = e.delegateTarget as HTMLElement,
                         value = getValue(target);
@@ -140,41 +119,6 @@ export function withValidation<T extends BaseViewConstructor<View<E>, E>, E exte
 
             if (errors.length) {
                 throw new ValidationErrors(errors);
-            }
-        }
-
-        getValue() {
-            const v = this._getValidations(),
-                out: { [key: string]: any } = {};
-
-            for (let key in v) {
-                const el = this.el!.querySelector(key),
-                    name = v[key].key() || el!.getAttribute('name') || v[key].label() || key;
-                out[name] = getValue(el as HTMLElement);
-                if (out[name] === '') out[name] = null;
-            }
-
-            return out;
-        }
-
-        setValue(input: { [key: string]: any }) {
-            const v = this._getValidations();
-
-            for (let key in v) {
-                const el = this.el!.querySelector(key) as HTMLElement,
-                    name = v[key].key() || el!.getAttribute('name') || v[key].label() || key;
-                if (input[name]) {
-                    setValue(el!, input[name]);
-                }
-            }
-        }
-
-        clear() {
-            const v = this._getValidations();
-
-            for (let key in v) {
-                const el = this.el!.querySelector(key) as HTMLElement;
-                setValue(el, null);
             }
         }
 

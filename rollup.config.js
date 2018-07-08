@@ -9,17 +9,21 @@ module.exports = [
     // browser-friendly UMD build
     {
         input: './src/index.ts',
-        output: {
+        output: [{
             file: pkg.browser,
             format: 'umd',
             name: 'viewjs.validation',
             globals: {
                 '@viewjs/view': 'viewjs.view',
                 '@viewjs/html': 'viewjs.html',
-                '@viewjs/utils': 'viewjs.utils'
+                '@viewjs/utils': 'viewjs.utils',
+                '@viewjs/data': 'viewjs.data'
             }
-        },
-        external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils'],
+        }, {
+            file: pkg.module,
+            format: 'es'
+        }],
+        external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils', '@viewjs/data'],
         plugins: [
             typescript({
                 typescript: require('typescript'),

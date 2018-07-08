@@ -2,6 +2,7 @@ import { View, BaseViewOptions } from '@viewjs/view';
 import { extend, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { ValidationErrors } from './errors';
 import { withValidation, IValidationView } from './validation-view';
+import { withModel, IModelController, withBindings } from '@viewjs/data';
 
 export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     errorClass?: string;
@@ -9,19 +10,16 @@ export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     errorMessageClass?: string;
 }
 
-export class FormView extends withValidation<Constructor<View<HTMLElement, FormViewOptions>>, HTMLElement>(View, { event: 'keyup' }) implements IValidationView {
+export class FormView extends withValidation(withBindings(withModel(View)), { event: 'keyup' }) {
 
     constructor(options?: FormViewOptions) {
         super(extend({
             errorMessageClass: 'input-message',
             errorClass: 'has-error',
-            showErrorMessage: true
+            showErrorMessage: true,
+            bindingAttribute: 'name'
         }, options || {}));
-
-
-
     }
-
 
     setValidationError(target: HTMLElement, errors: ValidationErrors) {
 
@@ -51,9 +49,7 @@ export class FormView extends withValidation<Constructor<View<HTMLElement, FormV
 
         container.classList.add(this.options.errorClass!);
 
-
         triggerMethodOn(this, 'valid', false);
-
 
     }
 

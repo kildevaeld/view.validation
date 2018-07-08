@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@viewjs/html'), require('@viewjs/utils'), require('@viewjs/view')) :
-    typeof define === 'function' && define.amd ? define(['exports', '@viewjs/html', '@viewjs/utils', '@viewjs/view'], factory) :
-    (factory((global.viewjs = global.viewjs || {}, global.viewjs.validation = {}),global.viewjs.html,global.viewjs.utils,global.viewjs.view));
-}(this, (function (exports,html,utils,view) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@viewjs/html'), require('@viewjs/utils'), require('@viewjs/view'), require('@viewjs/data')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@viewjs/html', '@viewjs/utils', '@viewjs/view', '@viewjs/data'], factory) :
+    (factory((global.viewjs = global.viewjs || {}, global.viewjs.validation = {}),global.viewjs.html,global.viewjs.utils,global.viewjs.view,global.viewjs.data));
+}(this, (function (exports,html,utils,view,data) { 'use strict';
 
     var classCallCheck = function (instance, Constructor) {
       if (!(instance instanceof Constructor)) {
@@ -236,14 +236,14 @@
             // e.g. config.person.name
         pattern = new RegExp(start + "\\s*(" + path + ")\\s*" + end, "gi"),
             undef;
-        return function (template, data) {
+        return function (template, data$$1) {
             var shouldThrow = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
             // Merge data into the template string
             return template.replace(pattern, function (tag, token) {
                 var path = token.split("."),
                     len = path.length,
-                    lookup = data,
+                    lookup = data$$1,
                     i = 0;
                 for (; i < len; i++) {
                     lookup = lookup[path[i]];
@@ -468,7 +468,6 @@
                         var wrapper = validation_wrap(this, v[key]);
                         this.delegate(options.event, key, wrapper);
                         if (options.event !== 'change') this.delegate('change', wrapper);
-                        //this.delegate(options.event, key, validation_wrap(this, v[key]));
                         this.delegate('blur', key, function (e) {
                             var target = e.delegateTarget,
                                 value = html.getValue(target);
@@ -504,40 +503,6 @@
                     }
                     if (errors.length) {
                         throw new ValidationErrors(errors);
-                    }
-                }
-            }, {
-                key: 'getValue',
-                value: function getValue() {
-                    var v = this._getValidations(),
-                        out = {};
-                    for (var key in v) {
-                        var el = this.el.querySelector(key),
-                            name = v[key].key() || el.getAttribute('name') || v[key].label() || key;
-                        out[name] = html.getValue(el);
-                        if (out[name] === '') out[name] = null;
-                    }
-                    return out;
-                }
-            }, {
-                key: 'setValue',
-                value: function setValue(input) {
-                    var v = this._getValidations();
-                    for (var key in v) {
-                        var el = this.el.querySelector(key),
-                            name = v[key].key() || el.getAttribute('name') || v[key].label() || key;
-                        if (input[name]) {
-                            html.setValue(el, input[name]);
-                        }
-                    }
-                }
-            }, {
-                key: 'clear',
-                value: function clear() {
-                    var v = this._getValidations();
-                    for (var key in v) {
-                        var el = this.el.querySelector(key);
-                        html.setValue(el, null);
                     }
                 }
             }, {
@@ -582,7 +547,8 @@
             return possibleConstructorReturn(this, (FormView.__proto__ || Object.getPrototypeOf(FormView)).call(this, utils.extend({
                 errorMessageClass: 'input-message',
                 errorClass: 'has-error',
-                showErrorMessage: true
+                showErrorMessage: true,
+                bindingAttribute: 'name'
             }, options || {})));
         }
 
@@ -629,7 +595,7 @@
             }
         }]);
         return FormView;
-    }(withValidation(view.BaseView, { event: 'keyup' }));
+    }(withValidation(data.withBindings(data.withModel(view.View)), { event: 'keyup' }));
 
     exports.validations = validations;
     exports.withValidation = withValidation;

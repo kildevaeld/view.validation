@@ -1,4 +1,5 @@
 const Path = require('path');
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 
 const babelOptions = {
@@ -44,6 +45,9 @@ module.exports = {
             }]
         }]
     },
+    plugins: [
+        new WebpackBundleSizeAnalyzerPlugin('plain-report2.txt')
+    ],
     node: {
         console: false,
         global: false,
