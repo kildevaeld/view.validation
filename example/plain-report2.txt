@@ -1,4 +1,4 @@
-@viewjs/data: 35.64 KB (26.5%)
+@viewjs/data: 35.7 KB (26.6%)
 @viewjs/view: 25.59 KB (19.0%)
 @viewjs/utils: 15.42 KB (11.5%)
 @viewjs/html: 14.85 KB (11.0%)

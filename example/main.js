@@ -2876,8 +2876,7 @@ __export(__webpack_require__(10));
           } else element.addEventListener('change', _this.onElementChanged);
         }
 
-        _this.onModelChanged();
-
+        if (_this.model.has(prop)) _this.onModelChanged();else _this.onElementChanged();
         return _this;
       }
 
@@ -2900,7 +2899,7 @@ __export(__webpack_require__(10));
         value: function onElementChanged() {
           if (this._setting) return;
           this._setting = true;
-          this.model.set(this.prop, html.getValue(this.element));
+          this.model.set(this.prop, html.getValue(this.element) || null);
           this._setting = false;
         }
       }, {

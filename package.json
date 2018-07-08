@@ -28,7 +28,7 @@
     "webpack-bundle-size-analyzer": "^2.7.0"
   },
   "dependencies": {
-    "@viewjs/data": "^1.1.1",
+    "@viewjs/data": "^1.2.0",
     "@viewjs/html": "^1.1.0",
     "@viewjs/utils": "^1.4.2",
     "@viewjs/view": "^2.6.0"
