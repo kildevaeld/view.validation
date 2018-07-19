@@ -33,7 +33,7 @@ class Main extends withTemplate(ValidationView) {
     }
 }
 
-console.log('raorao')
+
 window.onload = () => {
 
     const main = new Main({ el: document.body });

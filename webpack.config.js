@@ -4,13 +4,14 @@ const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').
 
 const babelOptions = {
     "presets": [
-        "env"
+        "@babel/env"
     ],
     babelrc: false
 };
 
 module.exports = {
     entry: './lib/example/index.js',
+    mode: 'none',
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: ['.ts', '.tsx', '.js'],

@@ -1,7 +1,0 @@
-@viewjs/view: 25.59 KB (18.2%)
-@viewjs/models: 22.07 KB (15.7%)
-@viewjs/data: 19.75 KB (14.0%)
-@viewjs/utils: 15.42 KB (11.0%)
-@viewjs/html: 14.85 KB (10.5%)
-@viewjs/events: 12.11 KB (8.60%)
-<self>: 31.01 KB (22.0%)
