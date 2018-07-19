@@ -2,7 +2,9 @@ import { View, BaseViewOptions } from '@viewjs/view';
 import { extend, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { ValidationErrors } from './errors';
 import { withValidation, IValidationView } from './validation-view';
-import { withModel, IModelController, withBindings } from '@viewjs/data';
+import { withBindings } from '@viewjs/data';
+import { withModel, IModelController, } from '@viewjs/models';
+
 
 export interface FormViewOptions extends BaseViewOptions<HTMLElement> {
     errorClass?: string;
@@ -39,6 +41,7 @@ export class FormView extends withValidation(withBindings(withModel(View)), { ev
                 msg = document.createElement('div');
                 msg.classList.add(this.options.errorMessageClass!);
                 container.appendChild(msg);
+
             }
 
             msg.innerHTML = text;

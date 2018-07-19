@@ -2,7 +2,7 @@ import { ValidationErrors } from './errors';
 import { BaseViewConstructor, View } from '@viewjs/view';
 import { Constructor } from '@viewjs/utils';
 import { ValidatorMap } from './types';
-import { IModel } from '@viewjs/data';
+import { IModel } from '@viewjs/models';
 export interface IValidationView<ModelType extends IModel> {
     validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
     /**

@@ -3,7 +3,7 @@ import { BaseViewConstructor, View, normalizeUIKeys, DelegateEvent } from '@view
 import { result, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { getValue, setValue } from '@viewjs/html';
 import { IValidatorCollection, ValidatorMap } from './types';
-import { IModelController, IModel } from '@viewjs/data';
+import { IModelController, IModel } from '@viewjs/models';
 
 
 export interface IValidationView<ModelType extends IModel> {
@@ -50,9 +50,10 @@ export function withValidation<
             let target = e.delegateTarget || e.target;
             if (!target) throw new TypeError('no target');
 
-
+            const value = getValue(target as HTMLElement);
+            let valid = true;
             try {
-                v.validate(getValue(target as HTMLElement));
+                v.validate(value);
                 if (typeof this.clearValidationError === 'function') {
                     this.clearValidationError(target);
                 }
@@ -61,9 +62,10 @@ export function withValidation<
                 if (typeof this.setValidationError === 'function') {
                     this.setValidationError(target, e);
                 }
+                valid = false;
             }
 
-            triggerMethodOn(this, 'change:value');
+            triggerMethodOn(this, 'change:value', target, value, valid);
 
         }.bind(self);
     }

@@ -23,11 +23,13 @@ class Main extends withTemplate(FormView) {
     @event.click('button[type="submit"]')
     onSubmitClick(e: DelegateEvent) {
         e.preventDefault();
+        this.isValid();
         console.log(this.model);
     }
 
-    onChangeValue() {
-        console.log('change');
+
+    onChangeValue(el: HTMLElement, value: string, valid: boolean) {
+        console.log('change', el, value, valid);
     }
 }
 
