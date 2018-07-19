@@ -1,11 +1,11 @@
-import { FormView, validations } from '../';
+import { ValidationView, validations } from '../';
 import { withTemplate, DelegateEvent, event } from '@viewjs/view';
 
 @validations({
     '[name="email"]': validations.string().email(),
     '[name="name"]': validations.string().required()
 })
-class Main extends withTemplate(FormView) {
+class Main extends withTemplate(ValidationView) {
     template = () => `
     <form>
         <div>

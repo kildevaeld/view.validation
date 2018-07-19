@@ -17,20 +17,21 @@ module.exports = [
                 '@viewjs/view': 'viewjs.view',
                 '@viewjs/html': 'viewjs.html',
                 '@viewjs/utils': 'viewjs.utils',
-                '@viewjs/data': 'viewjs.data'
+                '@viewjs/data': 'viewjs.data',
+                '@viewjs/models': 'viewjs.models'
             }
         }, {
             file: pkg.module,
             format: 'es'
         }],
-        external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils', '@viewjs/data'],
+        external: ['@viewjs/view', '@viewjs/html', '@viewjs/utils', '@viewjs/data', '@viewjs/models'],
         plugins: [
             typescript({
                 typescript: require('typescript'),
                 declaration: false
             }),
-            resolve(),
-            commonjs(),
+            // resolve(),
+            // commonjs(),
             babel({
                 exclude: ['node_modules/**']
             })

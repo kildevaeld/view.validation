@@ -1,157 +1,79 @@
-import { ValidationErrors, ValidationError } from './errors';
-import { BaseViewConstructor, View, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
-import { result, triggerMethodOn, Constructor } from '@viewjs/utils';
-import { getValue, setValue } from '@viewjs/html';
-import { IValidatorCollection, ValidatorMap } from './types';
-import { IModelController, IModel } from '@viewjs/models';
+import { View, BaseViewOptions } from '@viewjs/view';
+import { extend, triggerMethodOn, Constructor } from '@viewjs/utils';
+import { ValidationErrors } from './errors';
+import { withValidation, IValidationView } from './with-validation';
+import { withBindings } from '@viewjs/data';
+import { withModel, IModelController, } from '@viewjs/models';
 
 
-export interface IValidationView<ModelType extends IModel> {
-    validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
-    /**
-     * Validate view. Throws a ValidationErrors on error
-     * Will all call setValidationError on error, and clearValidationError when no error
-     * 
-     * @param {boolean} [silent] 
-     * @memberof IValidationView
-     */
-    validate(silent?: boolean): void;
-    /**
-     * Check if the view validates to true
-     * 
-     * @returns {boolean} 
-     * @memberof IValidationView
-     */
-    isValid(): boolean;
-    /**
-     * This is called when a element is invalid
-     * 
-     * @param {HTMLElement} target 
-     * @param {ValidationErrors} error 
-     * @memberof IValidationView
-     */
-    setValidationError(target: HTMLElement, error: ValidationErrors): void;
-    clearValidationError(target: HTMLElement): void;
-    clearAllErrors(): this;
+export interface ValidationViewOptions extends BaseViewOptions<HTMLElement> {
+    errorClass?: string;
+    showErrorMessage?: boolean;
+    errorMessageClass?: string;
 }
 
-export interface ValidationViewOptions {
-    event: string;
-}
+export class ValidationView extends withValidation(withBindings(withModel(View)), { event: 'keyup' }) {
 
-export function withValidation<
-    T extends BaseViewConstructor<View<E>, E>,
-    E extends Element,
-    ModelType extends IModel
-    >(Base: T, options: ValidationViewOptions = { event: 'change' }): Constructor<IValidationView<ModelType>> & T {
+    constructor(options?: ValidationViewOptions) {
+        super(extend({
+            errorMessageClass: 'input-message',
+            errorClass: 'has-error',
+            showErrorMessage: true,
+            bindingAttribute: 'name'
+        }, options || {}));
+    }
 
-    function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
-        return function (this: T, e: DelegateEvent) {
-            let target = e.delegateTarget || e.target;
-            if (!target) throw new TypeError('no target');
+    setValidationError(target: HTMLElement, errors: ValidationErrors) {
 
-            const value = getValue(target as HTMLElement);
-            let valid = true;
-            try {
-                v.validate(value);
-                if (typeof this.clearValidationError === 'function') {
-                    this.clearValidationError(target);
-                }
-            } catch (e) {
+        if (target != document.activeElement) {
+            // Only show new errors in active element
+            return;
+        }
 
-                if (typeof this.setValidationError === 'function') {
-                    this.setValidationError(target, e);
-                }
-                valid = false;
+        const container = target.parentElement!
+
+        if (this.options.showErrorMessage) {
+            let msg = container.querySelector('.' + this.options.errorMessageClass!);
+
+            const text = this._getErrorMessage(errors);
+
+            if (!msg) {
+                msg = document.createElement('div');
+                msg.classList.add(this.options.errorMessageClass!);
+                container.appendChild(msg);
+
             }
 
-            triggerMethodOn(this, 'change:value', target, value, valid);
+            msg.innerHTML = text;
 
-        }.bind(self);
+            msg.classList.remove('hidden');
+
+        }
+
+        container.classList.add(this.options.errorClass!);
+
+        triggerMethodOn(this, 'valid', false);
+
+    }
+
+    clearValidationError(target: HTMLElement) {
+        const container = target.parentElement!
+        let msg = container.querySelector('.' + this.options.errorMessageClass!);
+        if (msg) {
+            msg.innerHTML = '';
+            msg.classList.add('hidden');
+        }
+        container.classList.remove(this.options.errorClass!);
+
+        triggerMethodOn(this, 'valid', this.isValid());
+
     }
 
 
-    return class extends Base {
-
-        validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
-
-        render() {
-            super.render()
-
-            const v = this._getValidations();
-
-            for (let key in v) {
-
-                const wrapper = validation_wrap(this, v[key]);
-                this.delegate(options.event, key, wrapper);
-                if (options.event !== 'change')
-                    this.delegate('change', wrapper)
-
-                this.delegate('blur', key, (e: DelegateEvent) => {
-                    let target = e.delegateTarget as HTMLElement,
-                        value = getValue(target);
-                    if (!value) this.clearValidationError(target);
-                });
-            }
-
-            return this;
-
-        }
-
-        setValidationError(..._: any[]) { }
-
-        clearValidationError(..._: any[]) { }
-
-        validate(silent: boolean = false): void {
-
-            const v = this._getValidations(),
-                errors = [] as ValidationError[];
-            for (let key in v) {
-                let el = this.el!.querySelector(key);
-
-                try {
-                    v[key].validate(getValue(el as HTMLElement));
-                    if (!silent)
-                        this.clearValidationError(el!);
-                } catch (e) {
-
-                    if (!silent)
-                        this.setValidationError(el!, e);
-                    (e as ValidationErrors).errors.forEach(m => errors.push(e));
-                }
-            }
-
-            if (errors.length) {
-                throw new ValidationErrors(errors);
-            }
-        }
-
-        isValid() {
-            try {
-                this.validate(true);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
-
-        clearAllErrors() {
-            const ui = (<any>this)._ui || this.ui,
-                v: any = normalizeUIKeys(this.validations, ui);
-            for (let key in v) {
-                let el = this.el!.querySelector(key);
-                this.clearValidationError(el!);
-            }
-
-            return this;
-        }
-
-        private _getValidations(): ValidatorMap {
-            const ui = (<any>this)._ui || this.ui,
-                validations = result(this, '_validations') || (<any>this.constructor).validations || {},
-                v: any = normalizeUIKeys(validations, ui);
-
-            return v;
-        }
+    protected _getErrorMessage(errors: ValidationErrors) {
+        return errors.errors.map(m => {
+            return m.message;
+        }).join('<br/>');
     }
+
 }

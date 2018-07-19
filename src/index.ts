@@ -1,6 +1,6 @@
 
 export * from './decorators';
 export * from './types';
-export * from './validation-view';
+export * from './with-validation';
 export * from './errors';
-export * from './form-view';
+export * from './validation-view';

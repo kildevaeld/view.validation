@@ -2,6 +2,8 @@ src/
 lib/example/
 example/
 .DS_Store
+.babelrc
 rollup.config.js
 tsconfig.json
 webpack.config.js
+gulpfile.js
