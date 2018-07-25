@@ -12,6 +12,7 @@ export interface ValidationViewOptions extends BaseViewOptions<HTMLElement> {
     errorMessageClass?: string;
 }
 
+
 export class ValidationView extends withValidation(withBindings(withModel(View)), { event: 'keyup' }) implements IBindableView, IModelController<IModel> {
 
     constructor(options?: ValidationViewOptions) {

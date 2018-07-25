@@ -40,8 +40,7 @@ export interface WithValidationOptions {
 }
 
 export function withValidation<
-    T extends BaseViewConstructor<View<E>, E>,
-    E extends Element,
+    T extends Constructor<View>,
     ModelType extends IModel
     >(Base: T, options: WithValidationOptions = { event: 'change' }): Constructor<IValidationView<ModelType>> & T {
 
