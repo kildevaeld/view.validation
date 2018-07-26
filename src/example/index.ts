@@ -1,5 +1,6 @@
 import { ValidationView, validations } from '../';
 import { withTemplate, DelegateEvent, event } from '@viewjs/view';
+import { decorators as deco } from '@viewjs/models';
 
 @validations({
     '[name="email"]': validations.string().email(),
@@ -32,7 +33,7 @@ class Main extends withTemplate(ValidationView) {
         console.log('raprapr', this);
     }
 
-
+    @deco.model.change()
     onChangeValue(el: HTMLElement, value: string, valid: boolean) {
         console.log('change', el, value, valid);
     }
@@ -43,4 +44,5 @@ window.onload = () => {
 
     const main = new Main({ el: document.body });
     main.render();
+    console.log(main)
 }   

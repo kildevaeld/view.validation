@@ -11,7 +11,7 @@ const babelOptions = {
 
 module.exports = {
     entry: './src/example/index.ts',
-    mode: 'none',
+    mode: 'development',
     resolve: {
         mainFields: ['module', 'browser', 'main'],
         // Add `.ts` and `.tsx` as a resolvable extension.

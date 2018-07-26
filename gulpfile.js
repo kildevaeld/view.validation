@@ -46,4 +46,4 @@ gulp.task('watch', ['default'], () => {
     gulp.watch('./src/**/*.ts', ['typescript', 'rollup']);
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', ['build', 'test']);

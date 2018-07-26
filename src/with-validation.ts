@@ -75,7 +75,7 @@ export function withValidationView<
                 valid = false;
             }
 
-            triggerMethodOn(this, 'change:value', target, value, valid);
+            //triggerMethodOn(this, 'change:value', target, value, valid);
 
         }.bind(self);
     }
