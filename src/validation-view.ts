@@ -1,7 +1,7 @@
 import { View, BaseViewOptions } from '@viewjs/view';
 import { extend, triggerMethodOn, Constructor } from '@viewjs/utils';
 import { ValidationErrors } from './validator';
-import { withValidationView } from './with-validation';
+import { withValidationView, IValidationView } from './with-validation';
 import { withBindings, IBindableView } from '@viewjs/data';
 import { withModel, IModelController, IModel } from '@viewjs/models';
 
@@ -13,7 +13,7 @@ export interface ValidationViewOptions extends BaseViewOptions<HTMLElement> {
 }
 
 
-export class ValidationView extends withValidationView(withBindings(withModel<Constructor<View<HTMLElement, ValidationViewOptions>>, IModel>(View)), { event: 'keyup' }) implements IBindableView, IModelController<IModel> {
+export class ValidationView extends withValidationView(withBindings(withModel<Constructor<View<HTMLElement, ValidationViewOptions>>, IModel>(View)), { event: 'keyup' }) implements IBindableView, IModelController<IModel>, IValidationView {
 
     constructor(options?: ValidationViewOptions) {
         super(extend({

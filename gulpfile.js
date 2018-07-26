@@ -2,7 +2,8 @@ const gulp = require('gulp'),
     bump = require('gulp-bump'),
     tsc = require('gulp-typescript'),
     rollup = require('rollup'),
-    mochaChrome = require('gulp-mocha-chrome');
+    mochaChrome = require('gulp-mocha-chrome'),
+    rimraf = require('rimraf');
 
 gulp.task('bump', () => {
     return gulp.src('./package.json')
@@ -38,6 +39,16 @@ gulp.task('rollup', _ => {
 gulp.task('test', ['rollup'], () => {
     return gulp.src('test/index.html')
         .pipe(mochaChrome())
+})
+
+gulp.task('clean', (cb) => {
+    var n = 0;
+    const cc = () => {
+        n++
+        if (n == 2) return cb();
+    };
+    rimraf('./lib/', cc);
+    rimraf('./dist', cc);
 })
 
 gulp.task('build', ['typescript', 'rollup']);
