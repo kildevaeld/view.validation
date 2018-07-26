@@ -1,5 +1,5 @@
 import { getValue } from '@viewjs/html';
-import { IValidator } from './types';
+import { IValidator, ValidationContext } from './types';
 import { equal } from '@viewjs/utils';
 
 export abstract class AbstractValidator {
@@ -8,6 +8,7 @@ export abstract class AbstractValidator {
         if (msg) this.message = msg;
     }
 }
+
 
 export class RequiredValidator extends AbstractValidator implements IValidator {
 
@@ -85,16 +86,13 @@ export class MatchValidator extends AbstractValidator implements IValidator {
         super(msg);
     }
 
-    validate(value: any): boolean {
+    validate(value: any, ctx: ValidationContext): boolean {
 
-        const el = document.querySelector(this.selector) as HTMLElement;
-        if (!el) {
-            throw new TypeError(`element with selector: "${this.selector}" not found in dom`);
+        if (!ctx.has(this.selector)) {
+            throw new TypeError(`element with selector: "${this.selector}" not found in context`);
         }
 
-        const otherValue = getValue(el!);
-
-        return equal(value, otherValue);
+        return equal(value, ctx.get(this.selector));
     }
 
 }

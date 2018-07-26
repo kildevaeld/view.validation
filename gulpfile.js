@@ -1,7 +1,8 @@
 const gulp = require('gulp'),
     bump = require('gulp-bump'),
     tsc = require('gulp-typescript'),
-    rollup = require('rollup');
+    rollup = require('rollup'),
+    mochaChrome = require('gulp-mocha-chrome');
 
 gulp.task('bump', () => {
     return gulp.src('./package.json')
@@ -34,6 +35,10 @@ gulp.task('rollup', _ => {
     }));
 });
 
+gulp.task('test', ['rollup'], () => {
+    return gulp.src('test/index.html')
+        .pipe(mochaChrome())
+})
 
 gulp.task('build', ['typescript', 'rollup']);
 

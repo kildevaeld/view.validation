@@ -1,17 +1,26 @@
-import { ValidatorMap } from './types';
 import { View, BaseViewOptions } from '@viewjs/view';
-import { StringValidator } from './validator';
-import { Constructor } from '@viewjs/utils'
+import { StringValidator, ValidatorMap, IValidatorCollection } from './validator';
+import { Constructor, isPlainObject } from '@viewjs/utils'
 
 export function validations(v: ValidatorMap | (() => ValidatorMap)) {
     return function <T extends Constructor<View<E, U>>, E extends HTMLElement, U extends BaseViewOptions<E>>(target: T) {
-        target.prototype._validations = v;
+        if (isPlainObject(target.prototype.validations)) {
+            Object.assign(target.prototype.validations, v);
+        } else {
+            target.prototype.validations = v;
+        }
     }
 }
 
 export namespace validations {
-
-    export function string(key?: string) {
+    /**
+     * Returns a string validator collection
+     *
+     * @export
+     * @param {string} [key]
+     * @returns {StringValidator}
+     */
+    export function string(key?: string): StringValidator {
         return new StringValidator(key);
     }
 

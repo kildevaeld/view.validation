@@ -1,13 +1,13 @@
-import { ValidationErrors, ValidationError } from './errors';
-import { BaseViewConstructor, View, normalizeUIKeys, DelegateEvent } from '@viewjs/view';
-import { result, triggerMethodOn, Constructor } from '@viewjs/utils';
-import { getValue, setValue } from '@viewjs/html';
-import { IValidatorCollection, ValidatorMap } from './types';
-import { IModelController, IModel } from '@viewjs/models';
+
+import { ValidationErrors, IValidatorCollection, ValidatorMap, ObjectValidatorError, ObjectValidatorErrorLireral } from './validator';
+import { View, normalizeUIKeys, DelegateEvent, EventsMap } from '@viewjs/view';
+import { result, triggerMethodOn, Constructor, has } from '@viewjs/utils';
+import { getValue } from '@viewjs/html';
+import { Model } from '@viewjs/models';
 
 
-export interface IValidationView<ModelType extends IModel> {
-    validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
+export interface IValidationView {
+    validations: ValidatorMap | ((this: IValidationView) => ValidatorMap);
     /**
      * Validate view. Throws a ValidationErrors on error
      * Will all call setValidationError on error, and clearValidationError when no error
@@ -35,14 +35,24 @@ export interface IValidationView<ModelType extends IModel> {
     clearAllErrors(): this;
 }
 
+
+function eventsAdd(events: EventsMap, eventStr: string, fn: Function) {
+    if (has(events, eventStr)) {
+        if (!Array.isArray(events[eventStr])) events[eventStr] = events[eventStr];
+    } else {
+        events[eventStr] = [];
+    }
+    (events[eventStr] as any[]).push(fn);
+}
+
+
 export interface WithValidationOptions {
     event: string;
 }
 
-export function withValidation<
+export function withValidationView<
     T extends Constructor<View>,
-    ModelType extends IModel
-    >(Base: T, options: WithValidationOptions = { event: 'change' }): Constructor<IValidationView<ModelType>> & T {
+    >(Base: T, options: WithValidationOptions = { event: 'change' }): T & Constructor<IValidationView> {
 
     function validation_wrap<T extends any>(self: T, v: IValidatorCollection) {
         return function (this: T, e: DelegateEvent) {
@@ -51,8 +61,9 @@ export function withValidation<
 
             const value = getValue(target as HTMLElement);
             let valid = true;
+            const ctx = this._getValidationContext();
             try {
-                v.validate(value);
+                v.validate(value, ctx);
                 if (typeof this.clearValidationError === 'function') {
                     this.clearValidationError(target);
                 }
@@ -72,56 +83,57 @@ export function withValidation<
 
     return class extends Base {
 
-        validations: ValidatorMap | ((this: ModelType) => ValidatorMap);
+        validations: ValidatorMap | ((this: any) => ValidatorMap);
 
-        render() {
-            super.render()
+
+        delegateEvents(events: EventsMap) {
+            events = Object.assign({}, events || result(this, 'events') || {});
 
             const v = this._getValidations();
 
             for (let key in v) {
 
                 const wrapper = validation_wrap(this, v[key]);
-                this.delegate(options.event, key, wrapper);
-                if (options.event !== 'change')
-                    this.delegate('change', wrapper)
 
-                this.delegate('blur', key, (e: DelegateEvent) => {
+                eventsAdd(events, `${options.event} ${key}`, wrapper);
+                if (options.event != 'change')
+                    eventsAdd(events, `change ${key}`, wrapper);
+                eventsAdd(events, `blur ${key}`, (e: DelegateEvent) => {
                     let target = e.delegateTarget as HTMLElement,
                         value = getValue(target);
                     if (!value) this.clearValidationError(target);
                 });
+
             }
 
-            return this;
+            super.delegateEvents(events);
 
+            return this;
         }
 
-        setValidationError(..._: any[]) { }
-
-        clearValidationError(..._: any[]) { }
 
         validate(silent: boolean = false): void {
 
             const v = this._getValidations(),
-                errors = [] as ValidationError[];
+                errors = {} as ObjectValidatorErrorLireral,
+                ctx = this._getValidationContext(v);
             for (let key in v) {
-                let el = this.el!.querySelector(key);
+                let el = this.el!.querySelector(key) as HTMLElement;
 
                 try {
-                    v[key].validate(getValue(el as HTMLElement));
+                    v[key].validate(getValue(el as HTMLElement), ctx);
                     if (!silent)
                         this.clearValidationError(el!);
                 } catch (e) {
-
+                    let k = v[key].key() || key;
                     if (!silent)
                         this.setValidationError(el!, e);
-                    (e as ValidationErrors).errors.forEach(m => errors.push(e));
+                    errors[k] = e;
                 }
             }
 
             if (errors.length) {
-                throw new ValidationErrors(errors);
+                throw new ObjectValidatorError(errors);
             }
         }
 
@@ -139,7 +151,7 @@ export function withValidation<
                 v: any = normalizeUIKeys(this.validations, ui);
             for (let key in v) {
                 let el = this.el!.querySelector(key);
-                this.clearValidationError(el!);
+                this.clearValidationError(el as HTMLElement);
             }
 
             return this;
@@ -147,10 +159,29 @@ export function withValidation<
 
         private _getValidations(): ValidatorMap {
             const ui = (<any>this)._ui || this.ui,
-                validations = result(this, '_validations') || (<any>this.constructor).validations || {},
+                validations = result(this, 'validations') || {},
                 v: any = normalizeUIKeys(validations, ui);
 
             return v;
         }
+
+        private _getValidationContext(map?: ValidatorMap, ignore: string[] = []): Model {
+            map = map || this._getValidations();
+            let val: any = {}, el: HTMLElement | null, k: string;
+            for (let key in map) {
+                k = map[key].key() || key;
+                if (~ignore.indexOf(k))
+                    continue;
+                el = this.el!.querySelector(key);
+
+                val[k] = getValue(el!);
+            }
+            return new Model(val);
+        }
+
+        setValidationError(target: HTMLElement, error: ValidationErrors): this { return this; }
+        clearValidationError(target: HTMLElement): this { return this; }
+
     }
 }
+

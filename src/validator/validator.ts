@@ -1,4 +1,4 @@
-import { IValidator } from './types';
+import { IValidator, ValidationContext } from './types';
 import {
     EmailValidator,
     MaxLengthValidator,
@@ -8,6 +8,7 @@ import {
     MatchValidator
 } from './validators';
 import { createError, ValidationError, ValidationErrors } from './errors';
+import { Model } from '@viewjs/models';
 
 
 export abstract class AbstractValidatorCollection<T> {
@@ -41,15 +42,13 @@ export abstract class AbstractValidatorCollection<T> {
         return this;
     }
 
-    match(selector: string, msg?: string) {
-        return this._addValidator(new MatchValidator(selector, msg));
-    }
+
 
     get message(): string {
         return this.getMessage();
     }
 
-    validate(value: T | undefined) {
+    validate(value: T | undefined, ctx: ValidationContext = new Model) {
         if (this._required) {
             if (!this._required.validate(value)) {
                 let e = createError(this._required, {
@@ -69,7 +68,7 @@ export abstract class AbstractValidatorCollection<T> {
 
         for (let i = 0, ii = this._validators.length; i < ii; i++) {
             const validator = this._validators[i];
-            if (!validator.validate(value)) {
+            if (!validator.validate(value, ctx)) {
                 errors.push(createError(validator, {
                     label: this._label || '',
                     key: this._key || ''
@@ -108,4 +107,13 @@ export class StringValidator extends AbstractValidatorCollection<string> {
         return this._addValidator(new MaxLengthValidator(len, msg));
     }
 
+    match(selector: string, msg?: string) {
+        return this._addValidator(new MatchValidator(selector, msg));
+    }
+
+}
+
+
+export function string(key?: string) {
+    return new StringValidator(key);
 }

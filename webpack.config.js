@@ -10,9 +10,10 @@ const babelOptions = {
 };
 
 module.exports = {
-    entry: './lib/example/index.js',
+    entry: './src/example/index.ts',
     mode: 'none',
     resolve: {
+        mainFields: ['module', 'browser', 'main'],
         // Add `.ts` and `.tsx` as a resolvable extension.
         extensions: ['.ts', '.tsx', '.js'],
     },
@@ -31,6 +32,7 @@ module.exports = {
                 {
                     loader: 'ts-loader',
                     options: {
+                        //typescript: require('typescript'),
                         compilerOptions: {
                             declaration: false
                         }
