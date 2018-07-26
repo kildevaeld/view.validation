@@ -62,19 +62,19 @@ export function withValidationView<
             const value = getValue(target as HTMLElement);
             let valid = true;
             const ctx = this._getValidationContext();
+
             try {
                 v.validate(value, ctx);
                 if (typeof this.clearValidationError === 'function') {
                     this.clearValidationError(target);
                 }
             } catch (e) {
-
                 if (typeof this.setValidationError === 'function') {
                     this.setValidationError(target, e);
                 }
                 valid = false;
             }
-
+            triggerMethodOn(this, 'valid', this.isValid());
             //triggerMethodOn(this, 'change:value', target, value, valid);
 
         }.bind(self);
@@ -117,6 +117,7 @@ export function withValidationView<
             const v = this._getValidations(),
                 errors = {} as ObjectValidatorErrorLireral,
                 ctx = this._getValidationContext(v);
+
             for (let key in v) {
                 let el = this.el!.querySelector(key) as HTMLElement;
 
@@ -132,9 +133,14 @@ export function withValidationView<
                 }
             }
 
-            if (errors.length) {
+            const valid = Object.keys(errors).length == 0;
+            triggerMethodOn(this, 'valid', valid);
+
+            if (!valid) {
                 throw new ObjectValidatorError(errors);
             }
+
+
         }
 
         isValid() {

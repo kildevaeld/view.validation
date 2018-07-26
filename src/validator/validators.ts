@@ -87,7 +87,6 @@ export class MatchValidator extends AbstractValidator implements IValidator {
     }
 
     validate(value: any, ctx: ValidationContext): boolean {
-
         if (!ctx.has(this.selector)) {
             throw new TypeError(`element with selector: "${this.selector}" not found in context`);
         }
