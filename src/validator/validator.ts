@@ -42,6 +42,10 @@ export abstract class AbstractValidatorCollection<T> {
         return this;
     }
 
+    custom(validator: IValidator) {
+        this._addValidator(validator);
+    }
+
 
 
     get message(): string {
