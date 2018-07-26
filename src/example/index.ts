@@ -27,6 +27,11 @@ class Main extends withTemplate(ValidationView) {
         console.log(this.model);
     }
 
+    @event.keyup('input')
+    onKeyDown() {
+        console.log('raprapr', this)
+    }
+
 
     onChangeValue(el: HTMLElement, value: string, valid: boolean) {
         console.log('change', el, value, valid);
