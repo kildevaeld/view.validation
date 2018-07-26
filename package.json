@@ -49,7 +49,7 @@
     "@viewjs/html": "^1.1.0",
     "@viewjs/models": "^1.4.1",
     "@viewjs/utils": "^1.6.0",
-    "@viewjs/view": "^2.7.2"
+    "@viewjs/view": "^2.7.3"
   },
   "typings": "./lib/index.d.ts"
 }

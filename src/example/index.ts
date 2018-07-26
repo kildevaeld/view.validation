@@ -29,7 +29,7 @@ class Main extends withTemplate(ValidationView) {
 
     @event.keyup('input')
     onKeyDown() {
-        console.log('raprapr', this)
+        console.log('raprapr', this);
     }
 
 
